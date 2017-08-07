@@ -3,18 +3,8 @@
 > 幻彩系统项目的cli脚手架
 >
 > A command line for the project of kmranbow
-
-## Install
-
-```shell
-## php
-php -S <addr>:<port>
-## apache or nginx
-```
-
-## Preview
-
-![preview](./preview.png)
+>
+> 完工中..
 
 ## License
 Api Cli is open source and released under the MIT Licence.

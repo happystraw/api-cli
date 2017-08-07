@@ -1,0 +1,32 @@
+{
+    "name": "happystraw/api-cli",
+    "description": "A command line for the project of kmrainbow",
+    "keywords": ["cli", "kmrainbow"],
+    "license": "MIT",
+    "type": "project",
+    "authors": [
+        {
+            "name": "FangYutao",
+            "email": "fangyutao1993@hotmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.6.4",
+        "symfony/console": "3.4.x-dev"
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/"
+        },
+        "files": [
+            "src/Helpers.php"
+        ]
+    },
+    "minimum-stability": "dev",
+    "repositories": {
+        "packagist": {
+            "type": "composer",
+            "url": "https://packagist.phpcomposer.com"
+        }
+    }
+}
