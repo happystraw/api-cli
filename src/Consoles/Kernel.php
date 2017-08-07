@@ -15,14 +15,12 @@ use Symfony\Component\Console\Output\OutputInterface;
 class Kernel extends Console
 {
     protected $commands = [
-        \App\Consoles\App\InitCommand::class,
+        \App\Consoles\Demo\GreetCommand::class,
     ];
 
     protected function check(InputInterface $input, OutputInterface $output)
     {
-        $path = config('common.project.path');
-        if ($path && is_dir($path)) return true;
-        $output->writeln(lang('consoles.path_not_exist')?:'path not exist!');
-        return false;
+        // check the environment
+        return true;
     }
 }

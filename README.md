@@ -1,12 +1,12 @@
 # Api Cli
 
-> 幻彩系统项目的cli脚手架
+> 简易Console工具
 >
 > A command line for the project of kmranbow
 >
-> 完工中..
+> 完善中
 
 ## License
-Api Cli is open source and released under the MIT Licence.
+happystraw/console is open source and released under the MIT Licence.
 
 Copyright (c) 2017 FangYutao

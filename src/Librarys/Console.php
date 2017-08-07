@@ -18,9 +18,9 @@ abstract class Console extends Application
 {
     protected $commands = [];
 
-    public function __construct()
+    public function __construct($name = 'UNKNOWN', $version = 'UNKNOWN')
     {
-        parent::__construct(APP_NAME, APP_VERSION);
+        parent::__construct($name, $version);
         $this->initCommands();
     }
 

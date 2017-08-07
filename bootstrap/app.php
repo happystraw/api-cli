@@ -1,6 +1,6 @@
 <?php
 
-require __DIR__.'/../vendor/autoload.php';
+require __DIR__ . '/../vendor/autoload.php';
 
 $app = new \App\Application(realpath(__DIR__ . '/../'));
 
@@ -14,7 +14,7 @@ $app->check();
 $app->singleton('console', \App\Consoles\Kernel::class);
 
 // 注册Console语言参数
-$app->make('lang')->load(['consoles', 'params']);
+$app->make('lang')->load('consoles');
 
 return $app;
 

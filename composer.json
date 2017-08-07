@@ -1,7 +1,7 @@
 {
-    "name": "happystraw/api-cli",
-    "description": "A command line for the project of kmrainbow",
-    "keywords": ["cli", "kmrainbow"],
+    "name": "happystraw/console",
+    "description": "A framework for command line",
+    "keywords": ["cli", "console"],
     "license": "MIT",
     "type": "project",
     "authors": [

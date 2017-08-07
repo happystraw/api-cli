@@ -88,7 +88,7 @@ class Application extends Container
     {
         $config = $this->make('config');
         $config->path($this->configPath())->load('common')->loadConst('base');
-        $this->make('lang')->range($config->get('common.lang.range', 'zh-cn'))->path($this->langPath())->load('common');
+        $this->make('lang')->range($config->get('common.lang.range', 'en'))->path($this->langPath())->load('common');
     }
 
     /**
@@ -97,7 +97,7 @@ class Application extends Container
     public function check()
     {
         if (!IS_CLI) exit($this->make('lang')->get('common.not_cli'));
-        if (PHP_VERSION < APP_PHP_VERSION) exit($this->make('lang')->get('common.low_php'));
+        if (PHP_VERSION <= APP_PHP_VERSION) exit($this->make('lang')->get('common.low_php'));
     }
 
     /**
