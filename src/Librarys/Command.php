@@ -1,6 +1,6 @@
 <?php
 /**
- * Command.php
+ * Command
  * @author: FangYutao <fangyutao1993@hotmail.com>
  * @since : 2017-08-05
  */
