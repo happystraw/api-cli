@@ -1,4 +1,4 @@
-# Api Cli
+# Happystraw Console
 
 > 简易Console工具
 >
@@ -7,6 +7,6 @@
 > 完善中
 
 ## License
-happystraw/console is open source and released under the MIT Licence.
+Happystraw Console is open source and released under the MIT Licence.
 
 Copyright (c) 2017 FangYutao
