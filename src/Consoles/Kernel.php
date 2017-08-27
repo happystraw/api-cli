@@ -16,6 +16,7 @@ class Kernel extends Console
 {
     protected $commands = [
         \App\Consoles\Demo\GreetCommand::class,
+        \App\Consoles\Make\MakeCommand::class,
     ];
 
     protected function check(InputInterface $input, OutputInterface $output)

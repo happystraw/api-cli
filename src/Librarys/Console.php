@@ -33,7 +33,7 @@ abstract class Console extends Application
     }
 
     /**
-     * 检测环境
+     * Check environment
      *
      * @param OutputInterface $output
      * @return mixed
@@ -44,7 +44,7 @@ abstract class Console extends Application
     }
 
     /**
-     * 初始
+     * Init
      */
     protected function initCommands()
     {

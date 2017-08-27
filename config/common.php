@@ -1,6 +1,6 @@
 <?php
 return [
-    // 语言配置
+    // Language
     'lang' => [
         'range' => 'en'
     ]

@@ -3,7 +3,7 @@ use App\Application;
 
 if (!function_exists('app')) {
     /**
-     * 获取应用
+     * Get the Application
      *
      * @param string|null $abstract
      * @return \App\Librarys\Container|mixed|null
@@ -19,10 +19,10 @@ if (!function_exists('app')) {
 
 if (!function_exists('config')) {
     /**
-     * 获取 / 设置 应用的配置值
+     * Get / Set the Config
      *
      * @param  array|string  $key
-     * @param  mixed  $default 默认值
+     * @param  mixed  $default
      * @return mixed
      */
     function config($key = null, $default = null)
@@ -39,10 +39,10 @@ if (!function_exists('config')) {
 
 if (!function_exists('lang')) {
     /**
-     * 获取 / 设置 语言的配置值
+     * Get / Set the Language of Application
      *
      * @param  array|string  $key
-     * @param  array $vars 绑定值
+     * @param  array $vars
      * @return mixed
      */
     function lang($key = null, $vars = null)
@@ -59,7 +59,7 @@ if (!function_exists('lang')) {
 
 if (! function_exists('dd')) {
     /**
-     * 打印数据
+     * Dump vars
      *
      * @param array ...$params
      */

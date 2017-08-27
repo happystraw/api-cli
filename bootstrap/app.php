@@ -4,16 +4,16 @@ require __DIR__ . '/../vendor/autoload.php';
 
 $app = new \App\Application(realpath(__DIR__ . '/../'));
 
-// 初始化环境
+// Init environment
 $app->initEnv();
 
-// 检查环境
+// Check environment
 $app->check();
 
-// 注册Console
+// Register Console
 $app->singleton('console', \App\Consoles\Kernel::class);
 
-// 注册Console语言参数
+// Register language config of Console
 $app->make('lang')->load('consoles');
 
 return $app;

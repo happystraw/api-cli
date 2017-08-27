@@ -1,6 +1,6 @@
 <?php
 /**
- * 配置管理
+ * Config
  *
  * @author: FangYutao <fangyutao1993@hotmail.com>
  * @since : 2017-08-04
@@ -15,28 +15,28 @@ final class Config
 {
     use SingletonTraits;
     /**
-     * 全局配置
+     * Global configuration
      *
      * @var array
      */
     private $configs = [];
 
     /**
-     * 配置文件
+     * Configuration file
      *
      * @var array
      */
     private $configFiles = [];
 
     /**
-     * 基础目录
+     * Base Path
      *
      * @var string
      */
     private $path = '';
 
     /**
-     * 文件后缀
+     * File extension
      *
      * @var string
      */
@@ -45,7 +45,7 @@ final class Config
     private function __construct() {}
 
     /**
-     * 设置基础目录
+     * Set base path
      *
      * @param string $path
      * @return self|string
@@ -58,7 +58,7 @@ final class Config
     }
 
     /**
-     * 设置配置文件后缀
+     * Set file extension
      *
      * @param string $ext
      * @return $this
@@ -70,7 +70,7 @@ final class Config
     }
 
     /**
-     * 组合文件路径
+     * Join file path
      *
      * @param string $file
      * @param string $path
@@ -84,7 +84,7 @@ final class Config
     }
 
     /**
-     * 加载php配置文件
+     * Load file
      *
      * @param string $file 目录或文件
      * @param string|null $path 目录
@@ -118,7 +118,7 @@ final class Config
     }
 
     /**
-     * 加载全局变量
+     * load global configuration
      *
      * @param string $file
      * @param string|null $path
@@ -137,10 +137,10 @@ final class Config
     }
 
     /**
-     * 获取配置
+     * Get configuration
      *
      * @param string $name
-     * @param string $default 默认值
+     * @param string $default default value if the $name not exists
      * @return mixed
      */
     public function get($name = null, $default = null)
@@ -166,7 +166,7 @@ final class Config
     }
 
     /**
-     * 设置配置
+     * Set configuration
      *
      * @param array|string $name
      * @param mixed $value
@@ -174,12 +174,12 @@ final class Config
      */
     public function set($name, $value = null)
     {
-        // 单一设置
+        // set value by string
         if (is_string($name)) {
             if (!strpos($name, '.')) {
                 $this->configs[$name] = $value;
             } else {
-                // 多维数组配置
+                // set recursion with '.'
                 $array = explode('.', $name);
                 if (count($array) == 2) {
                     $this->configs[$array[0]][$array[1]] = $value;
@@ -191,7 +191,7 @@ final class Config
                 }
             }
         } elseif (is_array($name)) {
-            // 批量设置
+            // batch set
             if (!empty($value)) {
                 $this->configs[$value] = isset($this->configs[$value])
                     ? array_merge($this->configs[$value], $name)
@@ -200,14 +200,14 @@ final class Config
                 $this->configs = array_merge($this->configs, $name);
             }
         } else {
-            // 返回配置
+            // return
             return $this->configs;
         }
         return null;
     }
 
     /**
-     * 判断配置是否存在
+     * Determine whether the configuration exists
      *
      * @param  string $name
      * @return boolean
@@ -231,7 +231,7 @@ final class Config
     }
 
     /**
-     * 重置
+     * Reset
      */
     public function reset()
     {
@@ -239,7 +239,7 @@ final class Config
     }
 
     /**
-     * 重新加载配置
+     * Reload Files
      */
     public function reload()
     {
