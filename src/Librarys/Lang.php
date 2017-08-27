@@ -15,28 +15,26 @@ final class Lang
     use SingletonTraits;
 
     /**
-     * 语言数据
-     *
      * @var array
      */
     private $lang = [];
 
     /**
-     * 语言区域
+     * Language zone
      *
      * @var string
      */
     private $range = 'zh-cn';
 
     /**
-     * 基础路径
+     * The base path of language config file
      *
      * @var string
      */
     private $path = '';
 
     /**
-     * 文件后缀
+     * Config file extension
      *
      * @var string
      */
@@ -45,7 +43,7 @@ final class Lang
     private function __construct() {}
 
     /**
-     * 设置/获取语言范围
+     * Set / Get language's range
      *
      * @param null|string $range
      * @return $this|string
@@ -58,7 +56,7 @@ final class Lang
     }
 
     /**
-     * 设置/获取基础路径
+     * Set / Get base path
      *
      * @param null|string $path
      * @return $this|string
@@ -71,7 +69,7 @@ final class Lang
     }
 
     /**
-     * 设置配置文件后缀
+     * Set config file extension
      *
      * @param string $ext
      * @return $this
@@ -83,7 +81,7 @@ final class Lang
     }
 
     /**
-     * 组合文件路径
+     * Join the file path
      *
      * @param string $file
      * @param string $path
@@ -99,7 +97,7 @@ final class Lang
     }
 
     /**
-     * 加载文件
+     * Load files
      *
      * @param string $file
      * @param string|null $path
@@ -112,7 +110,7 @@ final class Lang
         if (!isset($this->lang[$range])) {
             $this->lang[$range] = [];
         }
-        // 批量定义
+        // multi define
         if (is_string($file)) {
             $file = [$file];
         }
@@ -134,7 +132,7 @@ final class Lang
     }
 
     /**
-     * 设置值
+     * Set value
      *
      * @param $name
      * @param null $value
@@ -170,7 +168,7 @@ final class Lang
     }
 
     /**
-     * 获取语言参数
+     * Get value
      *
      * @param null|string $name
      * @param array $vars
@@ -180,7 +178,7 @@ final class Lang
     public function get($name = null, $vars = [], $range = '')
     {
         $range = $range ?: $this->range;
-        // 空参数返回所有定义
+        // if $name is empty, return all
         if (empty($name)) {
             return isset($this->lang[$range]) ? $this->lang[$range] : null;
         }
@@ -201,14 +199,14 @@ final class Lang
                 }, $initial);
             }
         }
-        // 变量解析
+        // parse params
         if ($value && !empty($vars) && is_array($vars)) {
             if (key($vars) === 0) {
-                // 数字索引解析
+                // numeric index
                 array_unshift($vars, $value);
                 $value = call_user_func_array('sprintf', $vars);
             } else {
-                // 关联索引解析
+                // Association index parsing
                 $replace = array_keys($vars);
                 foreach ($replace as &$v) {
                     $v = ":{$v}";
@@ -221,7 +219,7 @@ final class Lang
     }
 
     /**
-     * 判断是否值
+     * Determine whether or not the value
      *
      * @param string $name
      * @param string $range

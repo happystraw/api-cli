@@ -30,7 +30,7 @@ class Command extends ConsoleCommand
     }
 
     /**
-     * 语言参数获取
+     * Get command language
      *
      * @param string $name
      * @return mixed

@@ -13,28 +13,28 @@ use ArrayAccess;
 class Container implements ArrayAccess
 {
     /**
-     * 容器单例
+     * Container instance
      *
      * @var static
      */
     protected static $instance;
 
     /**
-     * 绑定服务
+     * Bind service
      *
      * @var array
      */
     protected $bindings = [];
 
     /**
-     * 单例数组
+     * Array of instances
      *
      * @var array
      */
     protected $instances = [];
 
     /**
-     * 是否绑定服务
+     * Check a service was bound or not bound
      *
      * @param $abstract
      * @return bool
@@ -45,7 +45,7 @@ class Container implements ArrayAccess
     }
 
     /**
-     * 实现绑定注册
+     * Make a instance
      *
      * @param string $abstract
      * @return mixed|null
@@ -61,7 +61,7 @@ class Container implements ArrayAccess
     }
 
     /**
-     * 获取绑定信息
+     * Get the Bindings
      *
      * @param $abstract
      * @return mixed|null
@@ -72,7 +72,7 @@ class Container implements ArrayAccess
     }
 
     /**
-     * 绑定服务
+     * Bind Service
      *
      * @param string $abstract
      * @param Closure|null $concrete
@@ -88,7 +88,7 @@ class Container implements ArrayAccess
     }
 
     /**
-     * 注销绑定
+     * Drop the Service which was bound
      *
      * @param string $abstact
      */
@@ -98,7 +98,7 @@ class Container implements ArrayAccess
     }
 
     /**
-     * 获取全部绑定
+     * Get All Bindings
      *
      * @return array
      */
@@ -108,7 +108,7 @@ class Container implements ArrayAccess
     }
 
     /**
-     * 设置单例
+     * Set instance
      *
      * @param string $abstract
      * @param mixed $instance
@@ -119,7 +119,7 @@ class Container implements ArrayAccess
     }
 
     /**
-     * 设置单例 -- 不做不处理
+     * Set instance -- without parsing
      *
      * @param string $abstract
      * @param mixed $concrete
@@ -134,7 +134,7 @@ class Container implements ArrayAccess
     }
 
     /**
-     * 移除单例
+     * Remove instance
      *
      * @param string $abstract
      */
@@ -144,7 +144,7 @@ class Container implements ArrayAccess
     }
 
     /**
-     * 清空单例
+     * Clear all instances
      */
     public function clearInstances()
     {
@@ -152,7 +152,7 @@ class Container implements ArrayAccess
     }
 
     /**
-     * 清空
+     * Empty all binding and instances
      */
     public function flush()
     {
@@ -161,7 +161,7 @@ class Container implements ArrayAccess
     }
 
     /**
-     * 获取全部单例
+     * Get all instanes
      *
      * @return array
      */
@@ -171,7 +171,7 @@ class Container implements ArrayAccess
     }
 
     /**
-     * 返回自身
+     * Return self
      *
      * @return Container
      */
@@ -184,7 +184,7 @@ class Container implements ArrayAccess
     }
 
     /**
-     * 设置自身单例
+     * Set Self
      *
      * @param Container|null $app
      * @return Container

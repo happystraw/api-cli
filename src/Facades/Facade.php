@@ -1,6 +1,6 @@
 <?php
 /**
- * 静态引用转发
+ * Facade
  *
  * @author: FangYutao <fangyutao1993@hotmail.com>
  * @since : 2017-08-04
@@ -12,14 +12,14 @@ use Exception;
 abstract class Facade
 {
     /**
-     * 单例
+     * instance
      *
      * @var array
      */
     protected static $facades = [];
 
     /**
-     * 获取转发对象
+     * Get proxy object
      *
      * @throws Exception
      */
@@ -29,7 +29,7 @@ abstract class Facade
     }
 
     /**
-     * 生成单例
+     * Create a instance
      *
      * @param string|object $class
      * @return mixed
@@ -44,7 +44,7 @@ abstract class Facade
     }
 
     /**
-     * 获取单例
+     * Get instance
      *
      * @return mixed
      */

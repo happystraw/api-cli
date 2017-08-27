@@ -15,7 +15,8 @@ trait SingletonTraits
     protected static $instance = null;
 
     /**
-     * 单例生成
+     * Create Singleton
+     *
      * @param array $options
      * @return static
      */
@@ -28,7 +29,8 @@ trait SingletonTraits
     }
 
     /**
-     * 静态调用
+     * Magic Method, Static call methods
+     *
      * @param string $method
      * @param array $params
      * @return mixed

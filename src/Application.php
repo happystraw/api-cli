@@ -22,7 +22,7 @@ class Application extends Container
     }
 
     /**
-     * 设置基础路径
+     * Set base path
      *
      * @param string $basePath
      * @return $this
@@ -35,7 +35,7 @@ class Application extends Container
     }
 
     /**
-     * 版本
+     * version
      *
      * @return string
      */
@@ -45,7 +45,7 @@ class Application extends Container
     }
 
     /**
-     * 绑定基础服务
+     * Bind base servie
      */
     protected function registerBaseBindings()
     {
@@ -55,7 +55,7 @@ class Application extends Container
     }
 
     /**
-     * 绑定核心服务
+     * Bind core service
      */
     protected function registerCoreBindings()
     {
@@ -69,7 +69,7 @@ class Application extends Container
     }
 
     /**
-     * 绑定路径
+     * Bind path
      */
     protected function bindPathsInApplication()
     {
@@ -79,10 +79,12 @@ class Application extends Container
         $this->instance('path.config', $this->configPath());
         $this->instance('path.resources', $this->resourcePath());
         $this->instance('path.bootstrap', $this->bootstrapPath());
+        $this->instance('path.console', $this->consolePath());
+        $this->instance('path.tpl', $this->tempaltePath());
     }
 
     /**
-     * 初始化环境
+     * Init environment
      */
     public function initEnv()
     {
@@ -92,7 +94,7 @@ class Application extends Container
     }
 
     /**
-     * 检查环境
+     * Check environment
      */
     public function check()
     {
@@ -101,7 +103,7 @@ class Application extends Container
     }
 
     /**
-     * 代码路径
+     * path
      *
      * @return string
      */
@@ -111,7 +113,7 @@ class Application extends Container
     }
 
     /**
-     * 基础路径
+     * Base path
      *
      * @return mixed
      */
@@ -121,7 +123,7 @@ class Application extends Container
     }
 
     /**
-     * 启动目录
+     * Bootstrap path
      *
      * @return string
      */
@@ -131,7 +133,7 @@ class Application extends Container
     }
 
     /**
-     * 配置目录
+     * Configuration path
      *
      * @return string
      */
@@ -141,7 +143,7 @@ class Application extends Container
     }
 
     /**
-     * 资源文件路径
+     * Resource path
      *
      * @return string
      */
@@ -151,13 +153,33 @@ class Application extends Container
     }
 
     /**
-     * 语言参数路径
+     * Language path
      *
      * @return string
      */
     public function langPath()
     {
         return $this->resourcePath() . DIRECTORY_SEPARATOR . 'lang';
+    }
+
+    /**
+     * Console command file path
+     *
+     * @return void
+     */
+    public function consolePath()
+    {
+        return $this->path() . DIRECTORY_SEPARATOR . 'Consoles';
+    }
+
+    /**
+     * Template path
+     *
+     * @return void
+     */
+    public function tempaltePath()
+    {
+        return $this->resourcePath() . DIRECTORY_SEPARATOR . 'tpl';
     }
 
 
