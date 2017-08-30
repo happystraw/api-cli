@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "2a3e20fb06de8d666fa25e41d7e81352",
+    "content-hash": "8525dc5dcf53379f6d1be16481f96627",
     "packages": [
         {
             "name": "psr/log",
@@ -51,7 +51,7 @@
                 "psr",
                 "psr-3"
             ],
-            "time": "2016-10-10 12:19:37"
+            "time": "2016-10-10T12:19:37+00:00"
         },
         {
             "name": "symfony/console",
@@ -59,12 +59,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/console.git",
-                "reference": "86c76efc1ac932bd9d95091c4d3403c2f41e4a02"
+                "reference": "7e3ea754c13d8fdab9f91679cdd628a4d567949d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://files.phpcomposer.com/files/symfony/console/86c76efc1ac932bd9d95091c4d3403c2f41e4a02.zip",
-                "reference": "86c76efc1ac932bd9d95091c4d3403c2f41e4a02",
+                "url": "https://files.phpcomposer.com/files/symfony/console/7e3ea754c13d8fdab9f91679cdd628a4d567949d.zip",
+                "reference": "7e3ea754c13d8fdab9f91679cdd628a4d567949d",
                 "shasum": ""
             },
             "require": {
@@ -81,7 +81,6 @@
                 "symfony/config": "~3.3|~4.0",
                 "symfony/dependency-injection": "~3.3|~4.0",
                 "symfony/event-dispatcher": "~2.8|~3.0|~4.0",
-                "symfony/http-kernel": "~2.8|~3.0|~4.0",
                 "symfony/lock": "~3.4|~4.0",
                 "symfony/process": "~3.3|~4.0"
             },
@@ -121,7 +120,7 @@
             ],
             "description": "Symfony Console Component",
             "homepage": "https://symfony.com",
-            "time": "2017-08-03 09:34:20"
+            "time": "2017-08-29T21:15:51+00:00"
         },
         {
             "name": "symfony/debug",
@@ -129,12 +128,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/debug.git",
-                "reference": "c9fcef80c38a7fb257d7f0e8c198697c924fc727"
+                "reference": "f43bc2e05d4ac6fb36d6931fe41bd0a6d5c21a2b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://files.phpcomposer.com/files/symfony/debug/c9fcef80c38a7fb257d7f0e8c198697c924fc727.zip",
-                "reference": "c9fcef80c38a7fb257d7f0e8c198697c924fc727",
+                "url": "https://files.phpcomposer.com/files/symfony/debug/f43bc2e05d4ac6fb36d6931fe41bd0a6d5c21a2b.zip",
+                "reference": "f43bc2e05d4ac6fb36d6931fe41bd0a6d5c21a2b",
                 "shasum": ""
             },
             "require": {
@@ -177,7 +176,7 @@
             ],
             "description": "Symfony Debug Component",
             "homepage": "https://symfony.com",
-            "time": "2017-08-03 09:34:20"
+            "time": "2017-08-29T21:00:42+00:00"
         },
         {
             "name": "symfony/polyfill-mbstring",
@@ -236,7 +235,7 @@
                 "portable",
                 "shim"
             ],
-            "time": "2017-06-14 15:44:48"
+            "time": "2017-06-14T15:44:48+00:00"
         }
     ],
     "packages-dev": [],
