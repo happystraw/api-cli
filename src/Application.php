@@ -11,7 +11,6 @@ use App\Librarys\Container;
 
 class Application extends Container
 {
-    const VERSION = '1.0.0';
     protected $basePath;
 
     public function __construct($basePath = null)
@@ -41,7 +40,7 @@ class Application extends Container
      */
     public function version()
     {
-        return static::VERSION;
+        return APP_VERSION;
     }
 
     /**
@@ -99,7 +98,7 @@ class Application extends Container
     public function check()
     {
         if (!IS_CLI) exit($this->make('lang')->get('common.not_cli'));
-        if (PHP_VERSION <= APP_PHP_VERSION) exit($this->make('lang')->get('common.low_php'));
+        if (version_compare(PHP_VERSION, APP_PHP_VERSION, '<')) exit($this->make('lang')->get('common.low_php'));
     }
 
     /**

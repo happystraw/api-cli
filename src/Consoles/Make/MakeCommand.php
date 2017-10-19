@@ -21,7 +21,7 @@ class MakeCommand extends Command
     {
         $this
             ->setName('make:command')
-            ->setDescription('Create A New Command File')
+            ->setDescription('Create a new command.')
             ->addArgument(
                 'name',
                 InputArgument::REQUIRED,
@@ -41,7 +41,7 @@ class MakeCommand extends Command
     protected function createCommand($name)
     {
         if(!preg_match('/^[A-Za-z][A-Za-z0-9_]+\/[A-Za-z0-9_]+$/', $name)) {
-            return $this->setStatus(false, 'The name is illegal');
+            return $this->setStatus(false, 'The name is illegal. Format: <ModuleName>/<ClassName>.');
         }
         $arrNames = explode('/', $name);
         $moduleName = $arrNames[0];
@@ -65,7 +65,7 @@ class MakeCommand extends Command
 
     protected function parseCommandFile($filepath, $module, $class)
     {
-        $filename = $filepath. DIRECTORY_SEPARATOR . "{$class}Command.php";
+        $filename = $filepath. DIRECTORY_SEPARATOR . "{$class}.php";
         if (file_exists($filename)) return $this->setStatus(false, 'The command file exists');
         $tpl = file_get_contents(app('path.tpl') . DIRECTORY_SEPARATOR . 'command.tpl');
         $tpl = str_replace([
@@ -81,13 +81,13 @@ class MakeCommand extends Command
             strtolower($module),
             strtolower($class),
         ], $tpl);
-        if (file_put_contents($filepath. DIRECTORY_SEPARATOR . "{$class}Command.php", $tpl)) return $this->setStatus();
+        if (file_put_contents($filename, $tpl)) return $this->setStatus();
         else $this->setStatus(false, 'The command file is not writable');
     }
 
     protected function addToKernel($module, $class)
     {
-        $namespace = "\\App\\Consoles\\{$module}\\{$class}Command::class,";
+        $namespace = "\\App\\Consoles\\{$module}\\{$class}::class,";
         $kernelFile = app('path.console') . DIRECTORY_SEPARATOR . 'Kernel.php';
         $status = false;
         $content = preg_replace_callback(
@@ -108,7 +108,7 @@ class MakeCommand extends Command
         else $this->setStatus(false, 'The command kernel file is not writable');
     }
 
-    protected function setStatus($success = true, $message = 'File Created')
+    protected function setStatus($success = true, $message = 'Command Created.')
     {
         $type = $success ? 'info' : 'error';
         $this->text = "<{$type}>{$message}</{$type}>";

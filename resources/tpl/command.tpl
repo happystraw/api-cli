@@ -8,7 +8,7 @@ use App\Librarys\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class {{ className }}Command extends Command
+class {{ className }} extends Command
 {
     protected function configure()
     {
@@ -20,6 +20,6 @@ class {{ className }}Command extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $output->writeln('<info>Command Success</info>');
+        $output->writeln('<info>Command For ' . $this->getName() . '. At ' . __FILE__ . '.</info>');
     }
 }

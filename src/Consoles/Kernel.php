@@ -1,6 +1,6 @@
 <?php
 /**
- * 处理
+ * Kernel
  *
  * @author: FangYutao <fangyutao1993@hotmail.com>
  * @since : 2017-08-05
@@ -18,10 +18,4 @@ class Kernel extends Console
         \App\Consoles\Demo\GreetCommand::class,
         \App\Consoles\Make\MakeCommand::class,
     ];
-
-    protected function check(InputInterface $input, OutputInterface $output)
-    {
-        // check the environment
-        return true;
-    }
 }
