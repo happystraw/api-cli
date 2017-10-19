@@ -1,6 +1,6 @@
 # HappyStraw Console
 
-> 一个简易Console框架
+> 一个轻量级cli框架
 
 ## 环境要求
 
