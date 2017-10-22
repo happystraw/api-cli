@@ -21,6 +21,8 @@ abstract class Facade
     /**
      * Get proxy object
      *
+     * @return mixed
+     *
      * @throws Exception
      */
     protected static function getFacadeAccessor()
@@ -39,7 +41,7 @@ abstract class Facade
         if (is_object($class)) {
             return $class;
         } else {
-            return isset(static::$facades[$class]) ? static::$facades[$class] : (static::$facades[$class] = new $class());
+            return isset(static::$facades[$class]) ? static::$facades[$class] : (static::$facades[$class] = app($class));
         }
     }
 

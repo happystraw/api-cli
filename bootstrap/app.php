@@ -5,10 +5,7 @@ require __DIR__ . '/../vendor/autoload.php';
 $app = new \App\Application(realpath(__DIR__ . '/../'));
 
 // Init environment
-$app->initEnv();
-
-// Check environment
-$app->check();
+$app->init();
 
 // Register Console
 $app->singleton('console', \App\Consoles\Kernel::class);
@@ -18,7 +15,7 @@ $app->singleton('console', \App\Consoles\Kernel::class);
 // $app->make('config')->loadConst('other_const');
 
 // Register language config of Console
-$app->make('lang')->load('consoles');
+$app->make('lang')->load('console');
 
 return $app;
 

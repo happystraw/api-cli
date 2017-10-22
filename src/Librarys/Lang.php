@@ -8,11 +8,15 @@
 
 namespace App\Librarys;
 
+use App\Traits\LoadFileTraits;
 use App\Traits\SingletonTraits;
+use App\Utils\Arr;
+use ArrayAccess;
 
-final class Lang
+class Lang implements ArrayAccess
 {
     use SingletonTraits;
+    use LoadFileTraits;
 
     /**
      * @var array
@@ -24,7 +28,7 @@ final class Lang
      *
      * @var string
      */
-    private $range = 'zh-cn';
+    private $range = 'en';
 
     /**
      * The base path of language config file
@@ -39,8 +43,6 @@ final class Lang
      * @var string
      */
     private $fileExt = 'php';
-
-    private function __construct() {}
 
     /**
      * Set / Get language's range
@@ -104,29 +106,12 @@ final class Lang
      * @param string $range
      * @return mixed
      */
-    public function load($file, $path = null, $range = null)
+    public function load($file, $path = null, $range = '')
     {
-        $range = $range ?: $this->range;
-        if (!isset($this->lang[$range])) {
-            $this->lang[$range] = [];
-        }
-        // multi define
-        if (is_string($file)) {
-            $file = [$file];
-        }
-        $lang = [];
-        foreach ($file as $_file) {
-            $_file = $this->parseFilePath($_file, $path, $range);
-            if (file_exists($_file)) {
-                $_name = pathinfo($_file)['filename'];
-                $_lang = include $_file;
-                if (is_array($_lang)) {
-                    $lang[$_name] = array_change_key_case($_lang);
-                }
-            }
-        }
-        if (!empty($lang)) {
-            $this->lang[$range] = $lang + $this->lang[$range];
+        $file = (array)$file;
+        foreach ($file as $f) {
+            $filename = $this->parseFilePath($f, $path, $range);
+            if (($values = $this->file($filename))) $this->set($values);
         }
         return $this;
     }
@@ -135,34 +120,22 @@ final class Lang
      * Set value
      *
      * @param $name
-     * @param null $value
+     * @param mixed $value
      * @param string $range
      * @return self
      */
     public function set($name, $value = null, $range = '')
     {
-        $range = $range ?: $this->range;
-        if (!isset($this->lang[$range])) {
-            $this->lang[$range] = [];
-        }
+        $this->lang[$range] = $this->all($range);
         if (is_array($name)) {
-            $this->lang[$range] = array_change_key_case($name) + $this->lang[$range];
-        } else {
-            $name = strtolower($name);
-            if (!strpos($name, '.')) {
-                $this->lang[$range][$name] = $value;
-            } else {
-                // 多维数组配置
-                $array = explode('.', $name);
-                if (count($array) == 2) {
-                    $this->lang[$range][$array[0]][$array[1]] = $value;
-                } else {
-                    $array = array_reverse($array);
-                    $this->lang[$range] = array_replace_recursive($this->lang[$range], array_reduce($array, function ($carry, $item) {
-                        return [$item => $carry];
-                    }, $value));
-                }
+            // batch set
+            foreach ($name as $innerKey => $innerValue) {
+                Arr::set($this->lang[$range], $innerKey, $innerValue);
             }
+        } elseif (is_null($value)) {
+            Arr::forget($this->lang[$range], $name);
+        } else {
+            Arr::set($this->lang[$range], $name, $value);
         }
         return $this;
     }
@@ -170,37 +143,16 @@ final class Lang
     /**
      * Get value
      *
-     * @param null|string $name
-     * @param array $vars
+     * @param string $name
+     * @param array $vars Bind values
      * @param string $range
      * @return mixed|null
      */
-    public function get($name = null, $vars = [], $range = '')
+    public function get($name, $vars = [], $range = '')
     {
-        $range = $range ?: $this->range;
-        // if $name is empty, return all
-        if (empty($name)) {
-            return isset($this->lang[$range]) ? $this->lang[$range] : null;
-        }
-        $name = strtolower($name);
-        if (!strpos($name, '.')) {
-            $value = isset($this->lang[$range][$name]) ? $this->lang[$range][$name] : null;
-        } else {
-            $array = explode('.', $name);
-            if (count($array) == 2) {
-                if (!isset($this->lang[$range][$array[0]][$array[1]])) return null;
-                $value = $this->lang[$range][$array[0]][$array[1]];
-            } else {
-                if (!isset($this->lang[$range][$array[0]]) || !is_array($this->lang[$range][$array[0]])) return null;
-                $initial = $this->lang[$range][$array[0]];
-                unset($array[0]);
-                $value = array_reduce($array, function ($carry, $item) {
-                    return isset($carry[$item]) ? $carry[$item] : null;
-                }, $initial);
-            }
-        }
-        // parse params
-        if ($value && !empty($vars) && is_array($vars)) {
+        $value = Arr::get($this->all($range), $name);
+        // parse params & format
+        if ($value && is_array($vars) && $vars) {
             if (key($vars) === 0) {
                 // numeric index
                 array_unshift($vars, $value);
@@ -227,7 +179,73 @@ final class Lang
      */
     public function has($name, $range = '')
     {
+        return Arr::has($this->all($range), $name);
+    }
+
+    /**
+     * Get all items in range
+     *
+     * @param string $range
+     * @return array|mixed
+     */
+    public function all(&$range = '')
+    {
         $range = $range ?: $this->range;
-        return isset($this->lang[$range][strtolower($name)]);
+        return isset($this->lang[$range]) ? $this->lang[$range] : [];
+    }
+
+    /**
+     * Get all items without range
+     *
+     * @return array
+     */
+    public function total()
+    {
+        return $this->lang;
+    }
+
+    /**
+     * Determine if the given configuration option exists.
+     *
+     * @param  string  $key
+     * @return bool
+     */
+    public function offsetExists($key)
+    {
+        return $this->has($key);
+    }
+
+    /**
+     * Get a configuration option.
+     *
+     * @param  string  $key
+     * @return mixed
+     */
+    public function offsetGet($key)
+    {
+        return $this->get($key);
+    }
+
+    /**
+     * Set a configuration option.
+     *
+     * @param  string  $key
+     * @param  mixed  $value
+     * @return void
+     */
+    public function offsetSet($key, $value)
+    {
+        $this->set($key, $value);
+    }
+
+    /**
+     * Unset a configuration option.
+     *
+     * @param  string  $key
+     * @return void
+     */
+    public function offsetUnset($key)
+    {
+        $this->set($key, null);
     }
 }

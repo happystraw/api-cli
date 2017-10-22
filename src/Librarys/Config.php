@@ -8,12 +8,16 @@
 
 namespace App\Librarys;
 
+use App\Traits\LoadFileTraits;
 use App\Traits\SingletonTraits;
+use App\Utils\Arr;
 use Exception;
+use ArrayAccess;
 
-final class Config
+class Config implements ArrayAccess
 {
     use SingletonTraits;
+    use LoadFileTraits;
     /**
      * Global configuration
      *
@@ -41,8 +45,6 @@ final class Config
      * @var string
      */
     private $fileExt = 'php';
-
-    private function __construct() {}
 
     /**
      * Set base path
@@ -86,34 +88,19 @@ final class Config
     /**
      * Load file
      *
-     * @param string $file 目录或文件
-     * @param string|null $path 目录
+     * @param string|array $file
+     * @param string|null $path
      * @return self
      * @throws Exception
      */
     public function load($file, $path = null)
     {
-        $file = $this->parseFilePath($file, $path);
-        if (is_dir($file)) {
-            $dirHandle = opendir($file);
-            while (FALSE !== ($filename = readdir($dirHandle))) {
-                $pathinfo = pathinfo($filename);
-                if ($pathinfo['extension'] === 'php') {
-                    $this->set(include $file . DIRECTORY_SEPARATOR . $filename, $pathinfo['filename']);
-                }
-            }
-            closedir($dirHandle);
-        } elseif (is_file($file)) {
-            $pathinfo = pathinfo($file);
-            if ($pathinfo['extension'] === 'php') {
-                $this->set(include $file, $pathinfo['filename']);
-            } else {
-                throw new Exception("Only Support *.php extension");
-            }
-        } else {
-            throw new Exception("FILE/DIR[{$file}] not Exists");
+        $file = (array)$file;
+        foreach ($file as $f) {
+            $filename = $this->parseFilePath($f, $path);
+            if (($values = $this->file($filename))) $this->set($values);
         }
-        $this->configFiles[] = $file;
+        $this->configFiles[] = ['file' => $file, 'path' => $path];
         return $this;
     }
 
@@ -143,26 +130,9 @@ final class Config
      * @param string $default default value if the $name not exists
      * @return mixed
      */
-    public function get($name = null, $default = null)
+    public function get($name, $default = null)
     {
-        if (empty($name)) {
-            return $this->configs;
-        } else {
-            // 二维数组配置
-            if (!strpos($name, '.')) {
-                return isset($this->configs[$name]) ? $this->configs[$name] : $default;
-            } else {
-                $array = explode('.', $name);
-                if (count($array) == 2) return isset($this->configs[$array[0]][$array[1]]) ? $this->configs[$array[0]][$array[1]] : $default;
-                if (!isset($this->configs[$array[0]]) || !is_array($this->configs[$array[0]])) return $default;
-                $initial = $this->configs[$array[0]];
-                $last = end($array);
-                unset($array[0]);
-                return array_reduce($array, function ($carry, $item) use ($last, $default) {
-                    return isset($carry[$item]) ? $carry[$item] : ($last == $item ? $default : null);
-                }, $initial);
-            }
-        }
+        return Arr::get($this->configs, $name, $default);
     }
 
     /**
@@ -170,40 +140,23 @@ final class Config
      *
      * @param array|string $name
      * @param mixed $value
-     * @return mixed
+     * @return self
      */
     public function set($name, $value = null)
     {
-        // set value by string
-        if (is_string($name)) {
-            if (!strpos($name, '.')) {
-                $this->configs[$name] = $value;
-            } else {
-                // set recursion with '.'
-                $array = explode('.', $name);
-                if (count($array) == 2) {
-                    $this->configs[$array[0]][$array[1]] = $value;
-                } else {
-                    $array = array_reverse($array);
-                    $this->configs = array_replace_recursive($this->configs, array_reduce($array, function ($carry, $item) {
-                        return [$item => $carry];
-                    }, $value));
-                }
-            }
-        } elseif (is_array($name)) {
+        if (is_array($name)) {
             // batch set
-            if (!empty($value)) {
-                $this->configs[$value] = isset($this->configs[$value])
-                    ? array_merge($this->configs[$value], $name)
-                    : $name;
-            } else {
-                $this->configs = array_merge($this->configs, $name);
+            foreach ($name as $innerKey => $innerValue) {
+                Arr::set($this->configs, $innerKey, $innerValue);
             }
-        } else {
-            // return
-            return $this->configs;
+        } elseif (is_null($value)) {
+            // unset value
+            Arr::forget($this->configs, $name);
+        } elseif (is_string($name)) {
+            // set value by string
+            Arr::set($this->configs, $name, $value);
         }
-        return null;
+        return $this;
     }
 
     /**
@@ -214,20 +167,17 @@ final class Config
      */
     public function has($name)
     {
-        if (!strpos($name, '.')) {
-            return isset($this->configs[$name]);
-        } else {
-            $array = explode('.', $name);
-            if (count($array) == 2) return isset($this->configs[$array[0]][$array[1]]);
-            if (!isset($this->configs[$array[0]])) return false;
-            $initial = $this->configs[$array[0]];
-            $last = end($array);
-            unset($array[0]);
-            return array_reduce($array, function ($carry, $item) use ($last) {
-                if ($last == $item) return isset($carry[$item]);
-                return isset($carry[$item]) ? $carry[$item] : false;
-            }, $initial);
-        }
+        return Arr::has($this->configs, $name);
+    }
+
+    /**
+     * Get all of the configuration items for the application.
+     *
+     * @return array
+     */
+    public function all()
+    {
+        return $this->configs;
     }
 
     /**
@@ -243,8 +193,53 @@ final class Config
      */
     public function reload()
     {
-        foreach ($this->configFiles as $file) {
-            $this->load($file, '');
+        foreach ($this->configFiles as $config) {
+            $this->load($config['file'], $config['path']);
         }
+    }
+
+    /**
+     * Determine if the given configuration option exists.
+     *
+     * @param  string  $key
+     * @return bool
+     */
+    public function offsetExists($key)
+    {
+        return $this->has($key);
+    }
+
+    /**
+     * Get a configuration option.
+     *
+     * @param  string  $key
+     * @return mixed
+     */
+    public function offsetGet($key)
+    {
+        return $this->get($key);
+    }
+
+    /**
+     * Set a configuration option.
+     *
+     * @param  string  $key
+     * @param  mixed  $value
+     * @return void
+     */
+    public function offsetSet($key, $value)
+    {
+        $this->set($key, $value);
+    }
+
+    /**
+     * Unset a configuration option.
+     *
+     * @param  string  $key
+     * @return void
+     */
+    public function offsetUnset($key)
+    {
+        $this->set($key, null);
     }
 }

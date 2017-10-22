@@ -1,6 +1,6 @@
 # HappyStraw Console
 
-> 一个轻量级cli框架
+> 轻量级cli框架
 
 ## 环境要求
 
@@ -11,7 +11,11 @@
 
 ###### 1. 使用`composer`安装
 ```shell
+# stable version
 $ composer create-project happystraw/console project-name
+
+# develop version
+$ composer create-project happystraw/console:dev-develop project-name
 ```
 
 ###### 2. 创建新的命令
@@ -35,7 +39,7 @@ $ php potato make:command User/Create
 ├── bootstrap // 启动文件目录
 │   └── app.php // 应用启动文件
 ├── config // 配置文件目录
-│   ├── base.php // 常量定义文件
+│   ├── const.php // 常量定义文件
 │   └── common.php // 配置定义文件
 ├── resources // 资源目录
 │   ├── lang // 语言配置文件目录

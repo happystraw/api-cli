@@ -9,8 +9,6 @@
 namespace App\Consoles;
 
 use App\Librarys\Console;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
 
 class Kernel extends Console
 {

@@ -1,5 +1,5 @@
 <?php
-use App\Application;
+use App\Librarys\Container;
 
 if (!function_exists('app')) {
     /**
@@ -11,9 +11,9 @@ if (!function_exists('app')) {
     function app($abstract = null)
     {
         if (is_null($abstract)) {
-            return Application::getInstance();
+            return Container::getInstance();
         }
-        return Application::getInstance()->make($abstract);
+        return Container::getInstance()->make($abstract);
     }
 }
 
@@ -21,8 +21,8 @@ if (!function_exists('config')) {
     /**
      * Get / Set the Config
      *
-     * @param  array|string  $key
-     * @param  mixed  $default
+     * @param  array|string $key
+     * @param  mixed $default
      * @return mixed
      */
     function config($key = null, $default = null)
@@ -41,7 +41,7 @@ if (!function_exists('lang')) {
     /**
      * Get / Set the Language of Application
      *
-     * @param  array|string  $key
+     * @param  array|string $key
      * @param  array $vars
      * @return mixed
      */
@@ -57,7 +57,7 @@ if (!function_exists('lang')) {
     }
 }
 
-if (! function_exists('dd')) {
+if (!function_exists('dd')) {
     /**
      * Dump vars
      *
@@ -69,5 +69,68 @@ if (! function_exists('dd')) {
             var_dump($x);
         }, $params);
         die(1);
+    }
+}
+
+if (!function_exists('class_uses_recursive')) {
+    /**
+     * Returns all traits used by a class, its subclasses and trait of their traits.
+     *
+     * @param  string $class
+     * @return array
+     */
+    function class_uses_recursive($class)
+    {
+        $results = [];
+
+        foreach (array_merge([$class => $class], class_parents($class)) as $class) {
+            $results += trait_uses_recursive($class);
+        }
+
+        return array_unique($results);
+    }
+}
+
+if (!function_exists('trait_uses_recursive')) {
+    /**
+     * Returns all traits used by a trait and its traits.
+     *
+     * @param  string $trait
+     * @return array
+     */
+    function trait_uses_recursive($trait)
+    {
+        $traits = class_uses($trait);
+
+        foreach ($traits as $trait) {
+            $traits += trait_uses_recursive($trait);
+        }
+
+        return $traits;
+    }
+}
+
+if (!function_exists('value')) {
+    /**
+     * Return the default value of the given value.
+     *
+     * @param  mixed $value
+     * @return mixed
+     */
+    function value($value)
+    {
+        return $value instanceof \Closure ? $value() : $value;
+    }
+}
+
+if (!function_exists('windows_os')) {
+    /**
+     * Determine whether the current environment is Windows based.
+     *
+     * @return bool
+     */
+    function windows_os()
+    {
+        return strtolower(substr(PHP_OS, 0, 3)) === 'win';
     }
 }

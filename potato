@@ -1,5 +1,8 @@
 #!/usr/bin/env php
 <?php
+if (PHP_SAPI != 'cli') fwrite(STDERR, 'Warning: Please run in CLI mode.' . PHP_EOL) && exit();
+
+if (version_compare(PHP_VERSION, '5.6.4', '<')) fwrite(STDERR, 'Warning: Please run at PHP >= 5.6.4.' . PHP_EOL) && exit();
 
 $app = require_once __DIR__ . '/bootstrap/app.php';
 

@@ -7,12 +7,11 @@
  */
 
 namespace App\Facades;
-use App\Librarys\Lang as realLang;
 
 class Lang extends Facade
 {
     protected static function getFacadeAccessor()
     {
-        return realLang::instance();
+        return 'lang';
     }
 }

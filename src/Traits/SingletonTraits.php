@@ -14,6 +14,8 @@ trait SingletonTraits
 {
     protected static $instance = null;
 
+    private function __construct() {}
+
     /**
      * Create Singleton
      *

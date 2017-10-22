@@ -40,7 +40,7 @@ class Application extends Container
      */
     public function version()
     {
-        return APP_VERSION;
+        return APP_NAME . ' ' . APP_VERSION;
     }
 
     /**
@@ -59,11 +59,11 @@ class Application extends Container
     protected function registerCoreBindings()
     {
         $bindings = [
-            'config' => \App\Librarys\Config::instance(),
-            'lang' => \App\Librarys\Lang::instance()
+            'config' => \App\Librarys\Config::class,
+            'lang' => \App\Librarys\Lang::class
         ];
         foreach ($bindings as $alias => $bind) {
-            $this->instance($alias, $bind);
+            $this->singleton($alias, $bind);
         }
     }
 
@@ -85,20 +85,11 @@ class Application extends Container
     /**
      * Init environment
      */
-    public function initEnv()
+    public function init()
     {
         $config = $this->make('config');
-        $config->path($this->configPath())->load('common')->loadConst('base');
+        $config->path($this->configPath())->load('common')->loadConst('const');
         $this->make('lang')->range($config->get('common.lang.range', 'en'))->path($this->langPath())->load('common');
-    }
-
-    /**
-     * Check environment
-     */
-    public function check()
-    {
-        if (!IS_CLI) exit($this->make('lang')->get('common.not_cli'));
-        if (version_compare(PHP_VERSION, APP_PHP_VERSION, '<')) exit($this->make('lang')->get('common.low_php'));
     }
 
     /**
@@ -164,7 +155,7 @@ class Application extends Container
     /**
      * Console command file path
      *
-     * @return void
+     * @return string
      */
     public function consolePath()
     {
@@ -174,7 +165,7 @@ class Application extends Container
     /**
      * Template path
      *
-     * @return void
+     * @return string
      */
     public function tempaltePath()
     {

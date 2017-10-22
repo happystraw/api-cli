@@ -119,17 +119,20 @@ class Container implements ArrayAccess
     }
 
     /**
-     * Set instance -- without parsing
+     * Bind instance -- without parsing
      *
      * @param string $abstract
-     * @param mixed $concrete
+     * @param string $class
      * @param mixed $params
      */
-    public function singleton($abstract, $concrete, $params = null)
+    public function singleton($abstract, $class, $params = null)
     {
-        $this->bind($abstract, function () use ($concrete, $params) {
-            if (is_null($params)) return new $concrete();
-            return new $concrete($params);
+        $this->bind($abstract, function () use ($class, $params) {
+            if (isset(class_uses_recursive($class)[\App\Traits\SingletonTraits::class])) {
+                return is_null($params) ? $class::instance() : $class::instance($params);
+            } else {
+                return is_null($params) ? new $class() : new $class($params);
+            }
         });
     }
 
@@ -177,9 +180,6 @@ class Container implements ArrayAccess
      */
     public static function getInstance()
     {
-        if (is_null(static::$instance)) {
-            static::$instance = new static;
-        }
         return static::$instance;
     }
 
